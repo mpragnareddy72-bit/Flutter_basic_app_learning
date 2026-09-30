@@ -1,9 +1,15 @@
 
-import 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';//asking flutter to access to the Material Design widgets and classes.
+import 'countries_page.dart';
+
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
 
+//TasksPage = the widget itself.
+
+//_TasksPageState = where the changing data/UI logic is maintained.
   @override
   State<TasksPage> createState() => _TasksPageState();
 }
@@ -21,25 +27,39 @@ class _TasksPageState extends State<TasksPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Learning Sessions'),
+//navigator to countries_page
+        actions: [
+    IconButton(
+      icon: const Icon(Icons.public),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CountriesPage(),
+          ),
+        );
+      },
+    ),
+  ],
       ),
 
-      body: Row(
-        children: [
-          // LEFT SIDE: Sessions panel
-          SizedBox(
-            width: 180,
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'SESSIONS',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+      // LEFT SIDE - DRAWER
+      drawer: Drawer(
+        child: Column(
+          children: [
+            const DrawerHeader(
+              child: Center(
+                child: Text(
+                  'SESSIONS',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+            ),
+
+      
                 Expanded(
                   child: ListView.builder(
                     itemCount: sessionControllers.length,
@@ -48,9 +68,10 @@ class _TasksPageState extends State<TasksPage> {
                         title: Text('Session ${index + 1}'),
 
                         onTap: () {
-                          setState(() {
+                          setState(() { //setstate will re build the UI
                             selectedSession = index;
                           });
+                          Navigator.pop(context);
                         },
                       );
                     },
@@ -69,6 +90,7 @@ class _TasksPageState extends State<TasksPage> {
                         selectedSession =
                             sessionControllers.length - 1;
                       });
+                      Navigator.pop(context);
                     },
                     child: const Text('+ Add Session'),
                   ),
@@ -76,14 +98,11 @@ class _TasksPageState extends State<TasksPage> {
               ],
             ),
           ),
-          const VerticalDivider(
-            width: 1,
-            thickness: 1,
-          ),
+          
 
           // RIGHT SIDE: Session content
-          Expanded(
-            child: Padding(
+          
+            body: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,9 +144,7 @@ class _TasksPageState extends State<TasksPage> {
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        
   }
 }
